@@ -21,17 +21,20 @@ function EnableLocation() {
   };
 
   useEffect(() => {
-    const config = async () => {
-      let {foregroundPermission} = await Location.requestForegroundPermissionsAsync();
-      let {backgroundPermission} = await Location.requestBackgroundPermissionsAsync();
-      if (foregroundPermission!== 'granted' && backgroundPermission!== 'granted') {
-        console.log('Permission to access location was denied');
-      } else {
-        console.log('Permission to access location granted');
+    const requestPermissions = async () => {
+      const { status: foregroundStatus } = await Location.requestForegroundPermissionsAsync();
+      if (foregroundStatus === 'granted') {
+        const { status: backgroundStatus } = await Location.requestBackgroundPermissionsAsync();
+        if (backgroundStatus === 'granted') {
+          console.log("Permission Granted ");
+        }
+        else{
+          console.log("Permission Denied");
+        }
       }
     };
 
-    config();
+    requestPermissions();
   }, []);
 
   const onToggleSwitch = (value) => {
